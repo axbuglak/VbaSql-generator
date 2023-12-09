@@ -6,7 +6,7 @@ const createSqlStructure = require('./lib/sqlStructure.js');
 const createTypes = require('./lib/types.js');
 
 const SCHEMAS = path.join(process.cwd(), './schemas');
-
+const DB = path.join(process.cwd(), './db');
 
 (async () => {
   const schemas = await fsp.readdir(SCHEMAS);
@@ -19,7 +19,7 @@ const SCHEMAS = path.join(process.cwd(), './schemas');
     if (typeof schema.args === 'string') args = schema.args;
 
     const sql = sqlStructure(schemaName, args);
-    await fsp.writeFile(`${schemaName}.txt`, sql);
+    await fsp.writeFile(`${DB}/${schemaName}.txt`, sql);
   }
 })().catch((err) => {
   console.error(err);
