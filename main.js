@@ -4,9 +4,12 @@ const fsp = require('node:fs/promises');
 const path = require('node:path');
 const createSqlStructure = require('./lib/sqlStructure.js');
 const createVba = require('./lib/vbaStructure.js');
+const staticServer = require('./lib/static.js');
 
 const SCHEMAS = path.join(process.cwd(), './schemas');
 const DB = path.join(process.cwd(), './db');
+
+const STATIC_PORT = 3000;
 
 (async () => {
   const schemas = await fsp.readdir(SCHEMAS);
@@ -18,6 +21,8 @@ const DB = path.join(process.cwd(), './db');
     const vba = createVba(name, sql);
     await fsp.writeFile(`${DB}/${name}.txt`, vba);
   }
+
+  staticServer('./static', STATIC_PORT);
 })().catch((err) => {
   console.error(err);
 });
