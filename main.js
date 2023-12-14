@@ -21,8 +21,7 @@ const STATIC_PORT = 3000;
     const vba = createVba(name, sql);
     await fsp.writeFile(`${DB}/${name}.txt`, vba);
   }
-
-  staticServer('./static', STATIC_PORT);
+  console.log('successful! \r\n All schemas are loadede in db directory')
 })().catch((err) => {
   console.error(err);
 });
