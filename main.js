@@ -19,7 +19,7 @@ const STATIC_PORT = 3000;
     const name = schemaName + '-' + schema.method;
     const sql = createSqlStructure(schema, schemaName);
     const vba = createVba(name, sql);
-    await fsp.writeFile(`${DB}/${name}.txt`, vba);
+    await fsp.writeFile(`${DB}/${name}.bas`, vba);
   }
   console.log('successful! \r\n All schemas are loadede in db directory')
 })().catch((err) => {
