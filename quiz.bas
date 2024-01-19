@@ -1,16 +1,19 @@
 Sub quiz()
     Dim db As DAO.Database
-    Dim rsQ As DAO.Recordset
-    Dim fd As DAO.Field
-    Dim answers, versuchen, correctAns, userAnswer, sql As String
+    Dim rsQ, rsA As DAO.Recordset
+    Dim isExam
+    Dim answers, correctAns, sql As String
+    Dim userAnswer As String
+    Dim i, versuchen, richtig As Integer
+    richtig = 0
     versuchen = 0
-    userAnswer = ""
     Set db = Application.CurrentDb
     sql = "SELECT * FROM Question"
     Set rsQ = db.OpenRecordset(sql)
+    isExam = MsgBox("Willst du eine Prüfung schreiben?", vbYesNo, "Frage")
     Do While Not rsQ.EOF
-        Dim rsA As DAO.Recordset
-        Dim i As Integer
+        answers = ""
+        userAnswer = ""
         i = 1
         sql = "SELECT * FROM AntwortsQuestions WHERE questionId = " & rsQ!ID
         Set rsA = db.OpenRecordset(sql)
@@ -21,12 +24,18 @@ Sub quiz()
             rsA.MoveNext
         Loop
         While userAnswer <> correctAns
-            userAnswer = InputBox(rsQ!Name & vbCrLf & vbCrLf & answers)
-            If userAnswer <> correctAns Then versuchen = versuchen + 1
+            userAnswer = InputBox(rsQ!Name & vbCrLf & vbCrLf & answers, "Quiz")
+            If userAnswer = correctAns Then
+                richtig = richtig + 1
+            Else: versuchen = versuchen + 1
+            End If
+            If isExam = vbYes Then userAnswer = correctAns
         Wend
-        answers = ""
-        userAnswer = ""
         rsQ.MoveNext
     Loop
-    MsgBox "Erfolg!" & vbCrLf & "Anzahl den falschen Versuchen: " & versuchen
+    If isExam = vbYes Then
+        MsgBox "Erfolg!" & vbCrLf & "Anzahl den richtigen Antworten: " & _
+            richtig & vbCrLf & "In %: " & 100 / rsQ.RecordCount * richtig, vbInformation, "Prüfung Ergebnis"
+    Else: MsgBox "Erfolg!" & vbCrLf & "Anzahl den falschen Versuchen: " & versuchen, vbInformation, "Training Ergebnis"
+    End If
 End Sub
