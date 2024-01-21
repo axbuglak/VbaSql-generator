@@ -1,6 +1,6 @@
 # Generator SQL requests for VBA
 
-## For start
+## Starting
 
 - write your `schemas` in schemas folder according to example
 - `npm start` or `node main.js` in console
